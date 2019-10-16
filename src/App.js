@@ -18,9 +18,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import TimelineIcon from '@material-ui/icons/Dashboard'
 import ChatIcon from '@material-ui/icons/Chat';
+import LockIcon from '@material-ui/icons/LockOpen'
+import LogoutIcon from '@material-ui/icons/ExitToApp'
 import PeopleIcon from '@material-ui/icons/People';
-import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import Style from './components/Style'
@@ -33,13 +35,17 @@ function App() {
 
   const classes = useStyles();
 
-    const [open, setOpen] = React.useState(true);
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
+  const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+      setOpen(true);
+  };
+  const handleDrawerClose = () => {
+      setOpen(false);
+  };
+
+  function handleLogout() {
+    userHasAuthenticated(false);
+  }
 
   return (
     <div className={classes.root}>
@@ -80,9 +86,15 @@ function App() {
               <List>
                   <ListItem button component={Link} to="/timeline">
                       <ListItemIcon>
-                      <ChatIcon />
+                      <TimelineIcon />
                       </ListItemIcon>
                       <ListItemText primary="Timeline" />
+                  </ListItem>
+                  <ListItem button component={Link} to="/post">
+                      <ListItemIcon>
+                      <ChatIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Post" />
                   </ListItem>
                   <ListItem button component={Link} to="/following">
                       <ListItemIcon>
@@ -99,11 +111,11 @@ function App() {
               </List>
               <Divider />
               <List>
-                  <ListItem button component={Link} to="/profile">
+                  <ListItem button onClick={handleLogout} component={Link} to="/">
                       <ListItemIcon>
-                      <PersonIcon />
+                      <LogoutIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Profile" />
+                      <ListItemText primary="Logout" />
                   </ListItem>
               </List>
             </>
@@ -112,9 +124,9 @@ function App() {
               <List>
                 <ListItem button component={Link} to="/">
                     <ListItemIcon>
-                    <ChatIcon />
+                    <LockIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Welcome" />
+                    <ListItemText primary="Login" />
                 </ListItem>
               </List>
             </>  

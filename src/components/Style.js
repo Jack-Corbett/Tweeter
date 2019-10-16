@@ -1,3 +1,5 @@
+import { red } from "@material-ui/core/colors";
+
 export default theme => ({
     root: {
       display: 'flex',
@@ -74,5 +76,16 @@ export default theme => ({
     },
     fixedHeight: {
       height: 240,
+    },
+    avatar: {
+      margin: 10,
+      color: '#fff',
+      backgroundColor: red[500],
+    },
+    form: {
+      width: '100%',
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
     },
   })

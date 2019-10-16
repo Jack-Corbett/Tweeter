@@ -7,15 +7,15 @@ import Typography from '@material-ui/core/Typography';
 import PersonIcon from '@material-ui/icons/Person';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 
 import Style from '../components/Style';
 
+
 const useStyles = makeStyles(Style);
 
-export default function Timeline() {
+export default function Followers() {
   const classes = useStyles();
 
   return (
@@ -23,14 +23,14 @@ export default function Timeline() {
       <div className={classes.appBarSpacer} />
       <Container maxWidth="lg" className={classes.container}>
         <Typography variant="h4" gutterBottom>
-          Timeline
+          Followers
         </Typography>
 
         <Box mt={3}/>
         
+        {/* List of users who are following you */}
         <Grid container spacing={3}>
-          
-          <Grid item xs={12}>
+          <Grid item xs={3}>
               <Card className={classes.card}>
                 <CardHeader
                   avatar = {
@@ -39,37 +39,9 @@ export default function Timeline() {
                   </Avatar>
                   }
                   title="Jack Corbett"
-                  subheader="October 8th, 2019"
                 />
-                <CardContent>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    This is a test post to check that everything is working, how are you today?
-                  </Typography>
-                  
-                </CardContent>
               </Card>
           </Grid>
-
-          <Grid item xs={12}>
-              <Card className={classes.card}>
-                <CardHeader
-                  avatar = {
-                  <Avatar className={classes.avatar}>
-                    <PersonIcon />
-                  </Avatar>
-                  }
-                  title="Zoe Hunt"
-                  subheader="October 12th, 2019"
-                />
-                <CardContent>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    Here is another post just to test out how it scales!
-                  </Typography>
-                  
-                </CardContent>
-              </Card>
-          </Grid>
-
         </Grid>
       </Container>
     </main>
