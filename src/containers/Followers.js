@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 import Container from '@material-ui/core/Container';
@@ -9,18 +11,39 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Style from '../components/Style';
 
-
 const useStyles = makeStyles(Style);
 
-export default function Followers() {
+export default function Followers(props) {
+  const [followers, setFollowers] = useState();
   const classes = useStyles();
 
-  return (
-    <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
+  useEffect(() => {
+    async function fetchData() {
+      if (!props.isAuthenticated) {
+        return;
+      }
+
+      try {
+        const result = await axios("https://tweetersocial.azurewebsites.net/api/GetFollowers", {
+          params: {
+            code: "hwEPahgDT0raYxpKn9iVGqG0qRDqk4iyRJB7XsyXTjs6/AhUvOT3aQ==",
+            id: props.authenticatedUser
+          }
+        });
+        setFollowers(result.data);
+      } catch (e) {
+        alert(e);
+      }
+    };
+    
+    fetchData();
+  }, [props.isAuthenticated, props.authenticatedUser]);
+
+  return followers ? (
       <Container maxWidth="lg" className={classes.container}>
         <Typography variant="h4" gutterBottom>
           Followers
@@ -30,7 +53,8 @@ export default function Followers() {
         
         {/* List of users who are following you */}
         <Grid container spacing={3}>
-          <Grid item xs={3}>
+          {followers.map(follower => (
+            <Grid item xs={3} key={follower.userid}>
               <Card className={classes.card}>
                 <CardHeader
                   avatar = {
@@ -38,12 +62,14 @@ export default function Followers() {
                     <PersonIcon />
                   </Avatar>
                   }
-                  title="Jack Corbett"
+                  title={follower.username}
                 />
               </Card>
-          </Grid>
+            </Grid>
+          ))}
         </Grid>
       </Container>
-    </main>
+  ) : (
+    <LinearProgress color="secondary"/>
   );
 }

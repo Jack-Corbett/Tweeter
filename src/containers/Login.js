@@ -16,15 +16,19 @@ export default function Login(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    // Could be used to display progress indicator
+    // const [isLoading, setIsLoading] = useState(false);
 
     function validateForm() {
-    // Checks in the email and password have been entered
-    return email.length > 0 && password.length > 0;
+        // Checks in the email and password have been entered
+        return email.length > 0 && password.length > 0;
     }
 
 
     async function handleSubmit(event) {
         event.preventDefault();
+
+        // setIsLoading(true);
 
         try {
             // Sign in logic goes here
@@ -32,15 +36,15 @@ export default function Login(props) {
 
             // Set the authenticated prop and redirect to the user's timeline
             props.userHasAuthenticated(true);
+            props.setAuthenticatedUser(1);
             props.history.push("/timeline")
         } catch (e) {
             alert(e.message);
+            // setIsLoading(false);
         }
     }
 
     return (
-    <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
         <Typography variant="h4" gutterBottom>
             Login
@@ -81,6 +85,5 @@ export default function Login(props) {
             </Button>
         </form>
         </Container>
-    </main>
     );
 }

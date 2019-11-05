@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 import Container from '@material-ui/core/Container';
@@ -14,71 +16,95 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Style from '../components/Style';
 
-
 const useStyles = makeStyles(Style);
 
-export default function Following() {
+export default function Following(props) {
+  const [following, setFollowing] = useState();
   const classes = useStyles();
 
-  return (
-    <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
-      <Container maxWidth="lg" className={classes.container}>
-        <Typography variant="h4" gutterBottom>
-          Following
-        </Typography>
+  useEffect(() => {
+    async function fetchData() {
+      if (!props.isAuthenticated) {
+        return;
+      }
 
-        {/* Follow a user input form */}
-        <form className={classes.form}>
-          <TextField
-            fullWidth
-            autoFocus
-            variant="outlined"
-            margin="normal"
-            id="name"
-            label="Name"
-            name="name"
-          />
+      try {
+        const result = await axios("https://tweetersocial.azurewebsites.net/api/GetFollowing", {
+          params: {
+            code: "UeaTGBfdxI4B7ZaI2wNogWIWfH5NeGfqigilcCeL03tuzPbXnQukVw==",
+            id: props.authenticatedUser
+          }
+        });
+        setFollowing(result.data);
+      } catch (e) {
+        alert(e);
+      }
+    };
+    
+    fetchData();
+  }, [props.isAuthenticated, props.authenticatedUser]);
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-          Follow
-          </Button>
-        </form>
+  return following ? (
+    <Container maxWidth="lg" className={classes.container}>
+      <Typography variant="h4" gutterBottom>
+        Following
+      </Typography>
 
-        <Box mt={2} />
-        <Divider />
-        <Box mt={4} />
-        
-        {/* List of users you are following */}
-        <Grid container spacing={3}>
-          <Grid item xs={3}>
-              <Card className={classes.card}>
-                <CardHeader
-                  avatar = {
-                  <Avatar className={classes.avatar}>
-                    <PersonIcon />
-                  </Avatar>
-                  }
-                  title="Jack Corbett"
-                  
-                  action = {
-                    <IconButton aria-label="unfollow">
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                />
-              </Card>
+      {/* Follow a user input form */}
+      <form className={classes.form}>
+        <TextField
+          fullWidth
+          autoFocus
+          variant="outlined"
+          margin="normal"
+          id="name"
+          label="Name"
+          name="name"
+        />
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+        >
+        Follow
+        </Button>
+      </form>
+
+      <Box mt={2} />
+      <Divider />
+      <Box mt={4} />
+      
+      {/* List of users you are following */}
+      <Grid container spacing={3}>
+        {following.map(follow =>
+          <Grid item xs={3} key={follow.userid}>
+            <Card className={classes.card}>
+              <CardHeader
+                avatar = {
+                <Avatar className={classes.avatar}>
+                  <PersonIcon />
+                </Avatar>
+                }
+                title={follow.username}
+                
+                action = {
+                  <IconButton aria-label="unfollow">
+                    <DeleteIcon />
+                  </IconButton>
+                }
+              />
+            </Card>
           </Grid>
-        </Grid>
-      </Container>
-    </main>
+        )}
+      </Grid>
+    </Container>
+  ) : (
+    <LinearProgress color="secondary"/>
   );
 }

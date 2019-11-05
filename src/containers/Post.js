@@ -15,41 +15,38 @@ export default function Followers() {
 
 
   return (
-    <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
-      <Container maxWidth="lg" className={classes.container}>
-        <Typography variant="h4" gutterBottom>
-          Post
-        </Typography>
-        
-        {/* Compose a post */}
-        <form className={classes.form}>
-          <TextField
-            multiline={true}
-            rows={4}
-            rowsMax={8}
-            fullWidth
-            autoFocus
-            variant="outlined"
-            margin="normal"
-            id="content"
-            label="Content"
-            name="content"
-          />
+    <Container maxWidth="lg" className={classes.container}>
+      <Typography variant="h4" gutterBottom>
+        Post
+      </Typography>
+      
+      {/* Compose a post */}
+      <form className={classes.form}>
+        <TextField
+          multiline={true}
+          rows={4}
+          rowsMax={8}
+          fullWidth
+          autoFocus
+          variant="outlined"
+          margin="normal"
+          id="content"
+          label="Content"
+          name="content"
+        />
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-          Publish
-          </Button>
-          </form>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+        >
+        Publish
+        </Button>
+        </form>
 
+      
         
-          
-      </Container>
-    </main>
+    </Container>
   );
 }

@@ -30,8 +30,8 @@ import Style from './components/Style'
 const useStyles = makeStyles(Style);
 
 function App() {
-  // Could also check here if the user is already logged in
   const [isAuthenticated, userHasAuthenticated] = useState(false);
+  const [authenticatedUser, setAuthenticatedUser] = useState(0);
 
   const classes = useStyles();
 
@@ -45,6 +45,7 @@ function App() {
 
   function handleLogout() {
     userHasAuthenticated(false);
+    setAuthenticatedUser(0);
   }
 
   return (
@@ -133,7 +134,10 @@ function App() {
           )}
       </Drawer>
 
-      <Routes appProps={{ isAuthenticated, userHasAuthenticated }} />
+      <main className={classes.content}>
+      <div className={classes.appBarSpacer} />
+        <Routes appProps={{ isAuthenticated, userHasAuthenticated, authenticatedUser, setAuthenticatedUser }} />
+      </main>
     </div>
   );
 }
