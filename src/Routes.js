@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import AppliedRoute from './components/AppliedRoute';
-import Login from './containers/Login'
+import Login from './containers/Login';
+import Register from './containers/Register';
 import Timeline from './containers/Timeline';
 import Post from './containers/Post';
 import Following from './containers/Following';
@@ -12,6 +13,7 @@ export default function Routes({ appProps }) {
   return (
     <Switch>
       <AppliedRoute path='/' exact component={Login} appProps={appProps} />
+      <AppliedRoute path='/register' exact component={Register} appProps={appProps} />
       <AppliedRoute path='/timeline' exact component={Timeline} appProps={appProps} />
       <AppliedRoute path='/post' exact component={Post} appProps={appProps} />
       <AppliedRoute path='/following' exact component={Following} appProps={appProps} />

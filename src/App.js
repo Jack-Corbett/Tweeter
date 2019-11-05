@@ -18,10 +18,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import TimelineIcon from '@material-ui/icons/Dashboard'
+import TimelineIcon from '@material-ui/icons/Dashboard';
 import ChatIcon from '@material-ui/icons/Chat';
-import LockIcon from '@material-ui/icons/LockOpen'
-import LogoutIcon from '@material-ui/icons/ExitToApp'
+import LockIcon from '@material-ui/icons/LockOpen';
+import PersonIcon from '@material-ui/icons/AccountBox';
+import LogoutIcon from '@material-ui/icons/ExitToApp';
 import PeopleIcon from '@material-ui/icons/People';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
@@ -128,6 +129,12 @@ function App() {
                     <LockIcon />
                     </ListItemIcon>
                     <ListItemText primary="Login" />
+                </ListItem>
+                <ListItem button component={Link} to="/register">
+                    <ListItemIcon>
+                    <PersonIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Register" />
                 </ListItem>
               </List>
             </>  

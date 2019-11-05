@@ -28,9 +28,8 @@ export default function Followers(props) {
       }
 
       try {
-        const result = await axios("https://tweetersocial.azurewebsites.net/api/GetFollowers", {
+        const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetFollowers?code=hwEPahgDT0raYxpKn9iVGqG0qRDqk4iyRJB7XsyXTjs6/AhUvOT3aQ==", {
           params: {
-            code: "hwEPahgDT0raYxpKn9iVGqG0qRDqk4iyRJB7XsyXTjs6/AhUvOT3aQ==",
             id: props.authenticatedUser
           }
         });

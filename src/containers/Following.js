@@ -24,6 +24,7 @@ const useStyles = makeStyles(Style);
 
 export default function Following(props) {
   const [following, setFollowing] = useState();
+  const [username, setUsername] = useState("");
   const classes = useStyles();
 
   useEffect(() => {
@@ -33,9 +34,8 @@ export default function Following(props) {
       }
 
       try {
-        const result = await axios("https://tweetersocial.azurewebsites.net/api/GetFollowing", {
+        const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetFollowing?code=UeaTGBfdxI4B7ZaI2wNogWIWfH5NeGfqigilcCeL03tuzPbXnQukVw==", {
           params: {
-            code: "UeaTGBfdxI4B7ZaI2wNogWIWfH5NeGfqigilcCeL03tuzPbXnQukVw==",
             id: props.authenticatedUser
           }
         });
@@ -48,6 +48,38 @@ export default function Following(props) {
     fetchData();
   }, [props.isAuthenticated, props.authenticatedUser]);
 
+  function validateForm() {
+    return username.length > 0;
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    try {
+      await axios.post("https://tweetersocial.azurewebsites.net/api/FollowUser?code=4zrWxaUKBeOfEjbE1hYgSCfFa79K7eQMqw99PHRkSiaTsNS1UbaVjA==", {
+        id: props.authenticatedUser,
+        username: username
+      });
+      props.history.push("");
+      props.history.replace("/following");
+    } catch (e) {
+      alert(e)
+    }
+  }
+    
+  async function unfollow(followed) {
+    try {
+      await axios.post("https://tweetersocial.azurewebsites.net/api/UnfollowUser?code=D5PdC07jX5x52VNyIEEvlJai4BFMUqOzl8tz2mQ/Afd2gEP6p2PawA==", {
+        id: props.authenticatedUser,
+        followed: followed
+      });
+      props.history.push("");
+      props.history.replace("/following");
+    } catch (e) {
+      alert(e)
+    }
+  }
+
   return following ? (
     <Container maxWidth="lg" className={classes.container}>
       <Typography variant="h4" gutterBottom>
@@ -55,7 +87,7 @@ export default function Following(props) {
       </Typography>
 
       {/* Follow a user input form */}
-      <form className={classes.form}>
+      <form className={classes.form} onSubmit={handleSubmit}>
         <TextField
           fullWidth
           autoFocus
@@ -64,6 +96,8 @@ export default function Following(props) {
           id="name"
           label="Name"
           name="name"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
         />
 
         <Button
@@ -71,6 +105,7 @@ export default function Following(props) {
           variant="contained"
           color="primary"
           className={classes.submit}
+          disabled={!validateForm()}
         >
         Follow
         </Button>
@@ -94,7 +129,7 @@ export default function Following(props) {
                 title={follow.username}
                 
                 action = {
-                  <IconButton aria-label="unfollow">
+                  <IconButton aria-label="unfollow" onClick={() => unfollow(follow.userid)}>
                     <DeleteIcon />
                   </IconButton>
                 }

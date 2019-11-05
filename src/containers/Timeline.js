@@ -29,9 +29,8 @@ export default function Timeline(props) {
       }
 
       try {
-        const result = await axios("https://tweetersocial.azurewebsites.net/api/GetTimeline", {
+        const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetTimeline?code=WlUrP2AcLFK9xcboMM7YeP91CjqijqFvE3q18Vljun0r8surs9xGxQ==", {
           params: {
-            code: "WlUrP2AcLFK9xcboMM7YeP91CjqijqFvE3q18Vljun0r8surs9xGxQ==",
             id: props.authenticatedUser
           }
         });
@@ -66,7 +65,7 @@ export default function Timeline(props) {
                     subheader={new Date(post.time).toLocaleString()}
                 />
                 <CardContent>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <Typography variant="body2" color="textPrimary" component="p">
                       {post.content}
                     </Typography>
                 </CardContent>
