@@ -41,7 +41,7 @@ export default function Following(props) {
         });
         setFollowing(result.data);
       } catch (e) {
-        alert(e);
+        alert(e.message);
       }
     };
     
@@ -63,7 +63,7 @@ export default function Following(props) {
       props.history.push("");
       props.history.replace("/following");
     } catch (e) {
-      alert(e)
+      alert(e.message)
     }
   }
     
@@ -76,7 +76,7 @@ export default function Following(props) {
       props.history.push("");
       props.history.replace("/following");
     } catch (e) {
-      alert(e)
+      alert(e.message)
     }
   }
 

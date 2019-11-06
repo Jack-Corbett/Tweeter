@@ -1,50 +1,53 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
+import { makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Style from '../components/Style';
 
 const useStyles = makeStyles(Style);
 
 export default function Login(props) {
-    const classes = useStyles();
-
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    // Could be used to display progress indicator
-    // const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const classes = useStyles();
 
     function validateForm() {
-        // Checks in the email and password have been entered
-        return email.length > 0 && password.length > 0;
+        return username.length > 0 && password.length > 0;
     }
-
 
     async function handleSubmit(event) {
         event.preventDefault();
-
-        // setIsLoading(true);
+        setLoading(true);
 
         try {
-            // Sign in logic goes here
-            // await Auth.signIn(email, password);
-
-            // Set the authenticated prop and redirect to the user's timeline
+            const result = await axios.post("https://tweetersocial.azurewebsites.net/api/Login?code=nEMA1fDDIsxWoasb2x0qJ7jOpurajoqbCQzaIRua34YEouZo6Hw2Dw==", {
+                username: username,
+                password: password
+            });
             props.userHasAuthenticated(true);
-            props.setAuthenticatedUser(1);
-            props.history.push("/timeline")
+            props.setAuthenticatedUser(result.data.userid);
+            props.history.push("/timeline");
         } catch (e) {
             alert(e.message);
-            // setIsLoading(false);
+            setError(true);
+            setLoading(false);
         }
     }
 
     return (
+        <>
+        { loading ? <LinearProgress color="secondary"/> : null }
         <Container maxWidth="lg" className={classes.container}>
         <Typography variant="h4" gutterBottom>
             Login
@@ -54,23 +57,23 @@ export default function Login(props) {
             autoFocus
             variant="outlined"
             margin="normal"
-            required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            id="username"
+            label="Username"
+            name="username"
+            error={error}
+            value={username}
+            onChange={e => setUsername(e.target.value)}
             />
             <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             name="password"
             label="Password"
             type="password"
             id="password"
+            error={error}
             value={password}
             onChange={e => setPassword(e.target.value)}
             />
@@ -85,5 +88,6 @@ export default function Login(props) {
             </Button>
         </form>
         </Container>
+        </>
     );
 }

@@ -30,7 +30,7 @@ export default function Post(props) {
       });
       props.history.push("/timeline");
     } catch (e) {
-      alert(e);
+      alert(e.message);
     }
   } 
 

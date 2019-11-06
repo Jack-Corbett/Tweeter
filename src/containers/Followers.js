@@ -35,7 +35,7 @@ export default function Followers(props) {
         });
         setFollowers(result.data);
       } catch (e) {
-        alert(e);
+        alert(e.message);
       }
     };
     
