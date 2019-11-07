@@ -35,9 +35,10 @@ export default function Register(props) {
                 username: username,
                 password: password
             });
+            alert("Account created, please proceed to login")
             props.history.push("/")
         } catch (e) {
-            alert(e.message);
+            alert("Account creation failed, please try a different username");
             setError(true);
             setLoading(false);
         }

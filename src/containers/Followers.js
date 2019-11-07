@@ -35,7 +35,7 @@ export default function Followers(props) {
         });
         setFollowers(result.data);
       } catch (e) {
-        alert(e.message);
+        alert("Failed to fetch followers");
       }
     };
     

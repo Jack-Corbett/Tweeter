@@ -25,6 +25,7 @@ const useStyles = makeStyles(Style);
 export default function Following(props) {
   const [following, setFollowing] = useState();
   const [username, setUsername] = useState("");
+  const [error, setError] = useState(false);
   const classes = useStyles();
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function Following(props) {
         });
         setFollowing(result.data);
       } catch (e) {
-        alert(e.message);
+        alert("Failed to fetch following");
       }
     };
     
@@ -60,10 +61,12 @@ export default function Following(props) {
         id: props.authenticatedUser,
         username: username
       });
+      setError(false);
       props.history.push("");
       props.history.replace("/following");
     } catch (e) {
-      alert(e.message)
+      alert("Failed to follow user, please check their username and try again");
+      setError(true);
     }
   }
     
@@ -76,7 +79,7 @@ export default function Following(props) {
       props.history.push("");
       props.history.replace("/following");
     } catch (e) {
-      alert(e.message)
+      alert("Failed to unfollow user")
     }
   }
 
@@ -93,9 +96,10 @@ export default function Following(props) {
           autoFocus
           variant="outlined"
           margin="normal"
-          id="name"
-          label="Name"
-          name="name"
+          id="username"
+          label="Username"
+          name="username"
+          error={error}
           value={username}
           onChange={e => setUsername(e.target.value)}
         />

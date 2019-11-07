@@ -39,7 +39,7 @@ export default function Login(props) {
             props.setAuthenticatedUser(result.data.userid);
             props.history.push("/timeline");
         } catch (e) {
-            alert(e.message);
+            alert("Login failed, please check your credentials and retry");
             setError(true);
             setLoading(false);
         }

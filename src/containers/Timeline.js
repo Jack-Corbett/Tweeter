@@ -36,7 +36,7 @@ export default function Timeline(props) {
         });
         setPosts(result.data);
       } catch (e) {
-        alert(e.message);
+        alert("Failed to fetch timeline");
       }
     };
     
