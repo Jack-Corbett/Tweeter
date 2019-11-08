@@ -24,10 +24,6 @@ export default function Timeline(props) {
 
   useEffect(() => {
     async function fetchData() {
-      if (!props.isAuthenticated) {
-        return;
-      }
-
       try {
         const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetTimeline?code=WlUrP2AcLFK9xcboMM7YeP91CjqijqFvE3q18Vljun0r8surs9xGxQ==", {
           params: {

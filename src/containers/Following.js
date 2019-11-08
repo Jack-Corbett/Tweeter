@@ -30,10 +30,6 @@ export default function Following(props) {
 
   useEffect(() => {
     async function fetchData() {
-      if (!props.isAuthenticated) {
-        return;
-      }
-
       try {
         const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetFollowing?code=UeaTGBfdxI4B7ZaI2wNogWIWfH5NeGfqigilcCeL03tuzPbXnQukVw==", {
           params: {
