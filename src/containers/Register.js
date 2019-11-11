@@ -22,12 +22,15 @@ export default function Register(props) {
 
     const classes = useStyles();
 
+    // Keep the register button disabled until at least 1 character has been entered into the username and password fields
     function validateForm() {
         return username.length > 0 && password.length > 0;
     }
 
+    // Submit the register data to the azure function
     async function handleSubmit(event) {
         event.preventDefault();
+        // Trigger display of the loading bar
         setLoading(true);
 
         try {
@@ -35,9 +38,11 @@ export default function Register(props) {
                 username: username,
                 password: password
             });
+            // If success, confirm with an alert and then redirect to the login page once it's been dismissed
             alert("Account created, please proceed to login")
             props.history.push("/")
         } catch (e) {
+            // If it failed display an alert, remove the loading bar and trigger the error highlight on the form inputs
             alert("Account creation failed, please try a different username");
             setError(true);
             setLoading(false);

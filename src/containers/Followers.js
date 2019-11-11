@@ -18,53 +18,54 @@ import Style from '../components/Style';
 const useStyles = makeStyles(Style);
 
 export default function Followers(props) {
-  const [followers, setFollowers] = useState();
-  const classes = useStyles();
+    const [followers, setFollowers] = useState();
+    const classes = useStyles();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetFollowers?code=hwEPahgDT0raYxpKn9iVGqG0qRDqk4iyRJB7XsyXTjs6/AhUvOT3aQ==", {
-          params: {
-            id: props.authenticatedUser
-          }
-        });
-        setFollowers(result.data);
-      } catch (e) {
-        alert("Failed to fetch followers");
-      }
-    };
-    
-    fetchData();
-  }, [props.isAuthenticated, props.authenticatedUser]);
+    useEffect(() => {
+        // Fetch the user's followers
+        async function fetchData() {
+            try {
+                const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetFollowers?code=hwEPahgDT0raYxpKn9iVGqG0qRDqk4iyRJB7XsyXTjs6/AhUvOT3aQ==", {
+                    params: {
+                        id: props.authenticatedUser
+                    }
+                });
+                setFollowers(result.data);
+            } catch (e) {
+                alert("Failed to fetch followers");
+            }
+        };
 
-  return followers ? (
-      <Container maxWidth="lg" className={classes.container}>
-        <Typography variant="h4" gutterBottom>
-          Followers
+        fetchData();
+    }, [props.isAuthenticated, props.authenticatedUser]);
+
+    return followers ? (
+        <Container maxWidth="lg" className={classes.container}>
+            <Typography variant="h4" gutterBottom>
+                Followers
         </Typography>
 
-        <Box mt={3}/>
-        
-        {/* List of users who are following you */}
-        <Grid container spacing={3}>
-          {followers.map(follower => (
-            <Grid item xs={3} key={follower.userid}>
-              <Card className={classes.card}>
-                <CardHeader
-                  avatar = {
-                  <Avatar className={classes.avatar}>
-                    <PersonIcon />
-                  </Avatar>
-                  }
-                  title={follower.username}
-                />
-              </Card>
+            <Box mt={3} />
+
+            {/* Output the list of users who are following you */}
+            <Grid container spacing={3}>
+                {followers.map(follower => (
+                    <Grid item xs={3} key={follower.userid}>
+                        <Card className={classes.card}>
+                            <CardHeader
+                                avatar={
+                                    <Avatar className={classes.avatar}>
+                                        <PersonIcon />
+                                    </Avatar>
+                                }
+                                title={follower.username}
+                            />
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
-          ))}
-        </Grid>
-      </Container>
-  ) : (
-    <LinearProgress color="secondary"/>
-  );
+        </Container>
+    ) : (
+        <LinearProgress color="secondary" />
+    );
 }

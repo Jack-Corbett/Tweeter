@@ -23,123 +23,127 @@ import Style from '../components/Style';
 const useStyles = makeStyles(Style);
 
 export default function Following(props) {
-  const [following, setFollowing] = useState();
-  const [username, setUsername] = useState("");
-  const [error, setError] = useState(false);
-  const classes = useStyles();
+    const [following, setFollowing] = useState();
+    const [username, setUsername] = useState("");
+    const [error, setError] = useState(false);
+    const classes = useStyles();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetFollowing?code=UeaTGBfdxI4B7ZaI2wNogWIWfH5NeGfqigilcCeL03tuzPbXnQukVw==", {
-          params: {
-            id: props.authenticatedUser
-          }
-        });
-        setFollowing(result.data);
-      } catch (e) {
-        alert("Failed to fetch following");
-      }
-    };
-    
-    fetchData();
-  }, [props.isAuthenticated, props.authenticatedUser]);
+    useEffect(() => {
+        // Fetch the users that are following you
+        async function fetchData() {
+            try {
+                const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetFollowing?code=UeaTGBfdxI4B7ZaI2wNogWIWfH5NeGfqigilcCeL03tuzPbXnQukVw==", {
+                    params: {
+                        id: props.authenticatedUser
+                    }
+                });
+                setFollowing(result.data);
+            } catch (e) {
+                alert("Failed to fetch following");
+            }
+        };
 
-  function validateForm() {
-    return username.length > 0;
-  }
+        fetchData();
+    }, [props.isAuthenticated, props.authenticatedUser]);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-
-    try {
-      await axios.post("https://tweetersocial.azurewebsites.net/api/FollowUser?code=4zrWxaUKBeOfEjbE1hYgSCfFa79K7eQMqw99PHRkSiaTsNS1UbaVjA==", {
-        id: props.authenticatedUser,
-        username: username
-      });
-      setError(false);
-      props.history.push("");
-      props.history.replace("/following");
-    } catch (e) {
-      alert("Failed to follow user, please check their username and try again");
-      setError(true);
+    // Keep the submit button disabled until a username is input
+    function validateForm() {
+        return username.length > 0;
     }
-  }
-    
-  async function unfollow(followed) {
-    try {
-      await axios.post("https://tweetersocial.azurewebsites.net/api/UnfollowUser?code=D5PdC07jX5x52VNyIEEvlJai4BFMUqOzl8tz2mQ/Afd2gEP6p2PawA==", {
-        id: props.authenticatedUser,
-        followed: followed
-      });
-      props.history.push("");
-      props.history.replace("/following");
-    } catch (e) {
-      alert("Failed to unfollow user")
-    }
-  }
 
-  return following ? (
-    <Container maxWidth="lg" className={classes.container}>
-      <Typography variant="h4" gutterBottom>
-        Following
-      </Typography>
+    // Follow the user who's username has been input
+    async function handleSubmit(event) {
+        event.preventDefault();
 
-      {/* Follow a user input form */}
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          autoFocus
-          variant="outlined"
-          margin="normal"
-          id="username"
-          label="Username"
-          name="username"
-          error={error}
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
+        try {
+            await axios.post("https://tweetersocial.azurewebsites.net/api/FollowUser?code=4zrWxaUKBeOfEjbE1hYgSCfFa79K7eQMqw99PHRkSiaTsNS1UbaVjA==", {
+                id: props.authenticatedUser,
+                username: username
+            });
+            setError(false);
+            props.history.push("");
+            props.history.replace("/following");
+        } catch (e) {
+            alert("Failed to follow user, please check their username and try again");
+            setError(true);
+        }
+    }
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          disabled={!validateForm()}
-        >
-        Follow
-        </Button>
-      </form>
+    // Unfollow a user when the delete button is clicked
+    async function unfollow(followed) {
+        try {
+            await axios.post("https://tweetersocial.azurewebsites.net/api/UnfollowUser?code=D5PdC07jX5x52VNyIEEvlJai4BFMUqOzl8tz2mQ/Afd2gEP6p2PawA==", {
+                id: props.authenticatedUser,
+                followed: followed
+            });
+            props.history.push("");
+            props.history.replace("/following");
+        } catch (e) {
+            alert("Failed to unfollow user")
+        }
+    }
 
-      <Box mt={2} />
-      <Divider />
-      <Box mt={4} />
-      
-      {/* List of users you are following */}
-      <Grid container spacing={3}>
-        {following.map(follow =>
-          <Grid item xs={3} key={follow.userid}>
-            <Card className={classes.card}>
-              <CardHeader
-                avatar = {
-                <Avatar className={classes.avatar}>
-                  <PersonIcon />
-                </Avatar>
-                }
-                title={follow.username}
-                
-                action = {
-                  <IconButton aria-label="unfollow" onClick={() => unfollow(follow.userid)}>
-                    <DeleteIcon />
-                  </IconButton>
-                }
-              />
-            </Card>
-          </Grid>
-        )}
-      </Grid>
-    </Container>
-  ) : (
-    <LinearProgress color="secondary"/>
-  );
+    return following ? (
+        <Container maxWidth="lg" className={classes.container}>
+            <Typography variant="h4" gutterBottom>
+                Following
+            </Typography>
+
+            {/* Follow a user input form */}
+            <form className={classes.form} onSubmit={handleSubmit}>
+                <TextField
+                    fullWidth
+                    autoFocus
+                    variant="outlined"
+                    margin="normal"
+                    id="username"
+                    label="Username"
+                    name="username"
+                    error={error}
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                />
+
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    disabled={!validateForm()}
+                >
+                    Follow
+                </Button>
+            </form>
+
+            <Box mt={2} />
+            <Divider />
+            <Box mt={4} />
+
+            {/* List of users you are following */}
+            <Grid container spacing={3}>
+                {following.map(follow =>
+                    <Grid item xs={3} key={follow.userid}>
+                        <Card className={classes.card}>
+                            <CardHeader
+                                avatar={
+                                    <Avatar className={classes.avatar}>
+                                        <PersonIcon />
+                                    </Avatar>
+                                }
+                                title={follow.username}
+
+                                action={
+                                    <IconButton aria-label="unfollow" onClick={() => unfollow(follow.userid)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                }
+                            />
+                        </Card>
+                    </Grid>
+                )}
+            </Grid>
+        </Container>
+    ) : (
+        <LinearProgress color="secondary" />
+    );
 }

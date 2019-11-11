@@ -19,58 +19,59 @@ import Style from '../components/Style';
 const useStyles = makeStyles(Style);
 
 export default function Timeline(props) {
-  const [posts, setPosts] = useState();
-  const classes = useStyles();
+    const [posts, setPosts] = useState();
+    const classes = useStyles();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetTimeline?code=WlUrP2AcLFK9xcboMM7YeP91CjqijqFvE3q18Vljun0r8surs9xGxQ==", {
-          params: {
-            id: props.authenticatedUser
-          }
-        });
-        setPosts(result.data);
-      } catch (e) {
-        alert("Failed to fetch timeline");
-      }
-    };
-    
-    fetchData();
-  }, [props.isAuthenticated, props.authenticatedUser]);
-
-  return posts ? (
-      <Container maxWidth="lg" className={classes.container}>
-        <Typography variant="h4" gutterBottom>
-          Timeline
-        </Typography>
-
-        <Box mt={3}/>
-        
-        <Grid container spacing={3}>
-          {posts.map(post => (
-            <Grid item xs={12} key={post.postid}>  
-              <Card className={classes.card}>
-                <CardHeader
-                    avatar = {
-                    <Avatar className={classes.avatar}>
-                    <PersonIcon />
-                    </Avatar>
+    useEffect(() => {
+        // Fetch the posts for the users timeline
+        async function fetchData() {
+            try {
+                const result = await axios.get("https://tweetersocial.azurewebsites.net/api/GetTimeline?code=WlUrP2AcLFK9xcboMM7YeP91CjqijqFvE3q18Vljun0r8surs9xGxQ==", {
+                    params: {
+                        id: props.authenticatedUser
                     }
-                    title={post.username}
-                    subheader={new Date(post.time).toLocaleString()}
-                />
-                <CardContent>
-                    <Typography variant="body2" color="textPrimary" component="p">
-                      {post.content}
-                    </Typography>
-                </CardContent>
-              </Card>
+                });
+                setPosts(result.data);
+            } catch (e) {
+                alert("Failed to fetch timeline");
+            }
+        };
+
+        fetchData();
+    }, [props.isAuthenticated, props.authenticatedUser]);
+
+    // If the post data has been fetched display it, if not show a loading bar
+    return posts ? (
+        <Container maxWidth="lg" className={classes.container}>
+            <Typography variant="h4" gutterBottom>
+                Timeline
+            </Typography>
+            <Box mt={3} />
+
+            <Grid container spacing={3}>
+                {posts.map(post => (
+                    <Grid item xs={12} key={post.postid}>
+                        <Card className={classes.card}>
+                            <CardHeader
+                                avatar={
+                                    <Avatar className={classes.avatar}>
+                                        <PersonIcon />
+                                    </Avatar>
+                                }
+                                title={post.username}
+                                subheader={new Date(post.time).toLocaleString()}
+                            />
+                            <CardContent>
+                                <Typography variant="body2" color="textPrimary" component="p">
+                                    {post.content}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
-          ))}
-        </Grid>
-      </Container>
-  ) : (
-    <LinearProgress color="secondary"/>
-  );
+        </Container>
+    ) : (
+        <LinearProgress color="secondary" />
+    );
 }

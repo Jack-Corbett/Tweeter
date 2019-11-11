@@ -31,122 +31,124 @@ import Style from './components/Style'
 const useStyles = makeStyles(Style);
 
 function App() {
-  const [isAuthenticated, userHasAuthenticated] = useState(false);
-  const [authenticatedUser, setAuthenticatedUser] = useState(0);
+    const [isAuthenticated, userHasAuthenticated] = useState(false);
+    const [authenticatedUser, setAuthenticatedUser] = useState(0);
 
-  const classes = useStyles();
+    const classes = useStyles();
 
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-      setOpen(true);
-  };
-  const handleDrawerClose = () => {
-      setOpen(false);
-  };
+    // Open and close the side navigation
+    const [open, setOpen] = React.useState(true);
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
 
-  function handleLogout() {
-    userHasAuthenticated(false);
-    setAuthenticatedUser(0);
-  }
+    // End the users session by updating the state
+    function handleLogout() {
+        userHasAuthenticated(false);
+        setAuthenticatedUser(0);
+    }
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-        <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-        >
-            <MenuIcon />
-        </IconButton>
-        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Tweeter
-        </Typography>
-        </Toolbar>
-      </AppBar>
+    return (
+        <div className={classes.root}>
+            <CssBaseline />
 
-      <Drawer
-          variant="permanent"
-          classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-          }}
-          open={open}
-      >
-          <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-              <ChevronLeftIcon />
-          </IconButton>
-          </div>
-          <Divider />
-          {isAuthenticated ? (
-            <>
-              <List>
-                  <ListItem button component={Link} to="/timeline">
-                      <ListItemIcon>
-                      <TimelineIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Timeline" />
-                  </ListItem>
-                  <ListItem button component={Link} to="/post">
-                      <ListItemIcon>
-                      <ChatIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Post" />
-                  </ListItem>
-                  <ListItem button component={Link} to="/following">
-                      <ListItemIcon>
-                      <PersonAddIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Following" />
-                  </ListItem>
-                  <ListItem button component={Link} to="/followers">
-                      <ListItemIcon>
-                      <PeopleIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Followers" />
-                  </ListItem>
-              </List>
-              <Divider />
-              <List>
-                  <ListItem button onClick={handleLogout} component={Link} to="/">
-                      <ListItemIcon>
-                      <LogoutIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Logout" />
-                  </ListItem>
-              </List>
-            </>
-          ) : (
-            <>
-              <List>
-                <ListItem button component={Link} to="/">
-                    <ListItemIcon>
-                    <LockIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Login" />
-                </ListItem>
-                <ListItem button component={Link} to="/register">
-                    <ListItemIcon>
-                    <PersonIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Register" />
-                </ListItem>
-              </List>
-            </>  
-          )}
-      </Drawer>
+            <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+                <Toolbar className={classes.toolbar}>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                        Tweeter
+                    </Typography>
+                </Toolbar>
+            </AppBar>
 
-      <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
-        <Routes appProps={{ isAuthenticated, userHasAuthenticated, authenticatedUser, setAuthenticatedUser }} />
-      </main>
-    </div>
-  );
+            <Drawer
+                variant="permanent"
+                classes={{
+                    paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+                }}
+                open={open}
+            >
+                <div className={classes.toolbarIcon}>
+                    <IconButton onClick={handleDrawerClose}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                </div>
+                <Divider />
+                {isAuthenticated ? (
+                    <>
+                    <List>
+                        <ListItem button component={Link} to="/timeline">
+                            <ListItemIcon>
+                                <TimelineIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Timeline" />
+                        </ListItem>
+                        <ListItem button component={Link} to="/post">
+                            <ListItemIcon>
+                                <ChatIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Post" />
+                        </ListItem>
+                        <ListItem button component={Link} to="/following">
+                            <ListItemIcon>
+                                <PersonAddIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Following" />
+                        </ListItem>
+                        <ListItem button component={Link} to="/followers">
+                            <ListItemIcon>
+                                <PeopleIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Followers" />
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                        <ListItem button onClick={handleLogout} component={Link} to="/">
+                            <ListItemIcon>
+                                <LogoutIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Logout" />
+                        </ListItem>
+                    </List>
+                    </>
+                ) : (
+                    <>
+                    <List>
+                        <ListItem button component={Link} to="/">
+                            <ListItemIcon>
+                                <LockIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Login" />
+                        </ListItem>
+                        <ListItem button component={Link} to="/register">
+                            <ListItemIcon>
+                                <PersonIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Register" />
+                        </ListItem>
+                    </List>
+                    </>
+                )}
+            </Drawer>
+
+            <main className={classes.content}>
+                <div className={classes.appBarSpacer} />
+                <Routes appProps={{ isAuthenticated, userHasAuthenticated, authenticatedUser, setAuthenticatedUser }} />
+            </main>
+        </div>
+    );
 }
 
 export default App;

@@ -22,12 +22,15 @@ export default function Login(props) {
 
     const classes = useStyles();
 
+    // Keep the login button disabled until at least 1 character has been entered into the username and password fields
     function validateForm() {
         return username.length > 0 && password.length > 0;
     }
 
+    // Submit the login data to the azure function
     async function handleSubmit(event) {
         event.preventDefault();
+        // Trigger display of the loading bar
         setLoading(true);
 
         try {
@@ -35,10 +38,12 @@ export default function Login(props) {
                 username: username,
                 password: password
             });
+            // If success, authenticate the user and redirect to their timeline
             props.userHasAuthenticated(true);
             props.setAuthenticatedUser(result.data.userid);
             props.history.push("/timeline");
         } catch (e) {
+            // If it failed display the alert, remove the loading bar and trigger the error highlight on the form inputs
             alert("Login failed, please check your credentials and retry");
             setError(true);
             setLoading(false);
